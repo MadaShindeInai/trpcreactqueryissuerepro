@@ -7,8 +7,30 @@
  * @see https://trpc.io/docs/v11/router
  * @see https://trpc.io/docs/v11/procedures
  */
-import { initTRPC } from '@trpc/server';
-import { transformer } from '../utils/transformer';
+import { initTRPC } from "@trpc/server";
+import { transformer } from "../utils/transformer";
+import {
+  CreateNextContextOptions,
+  NextApiRequest,
+} from "@trpc/server/adapters/next";
+
+export const createInnerTRPCContext = ({ req }: { req?: NextApiRequest }) => {
+  return {
+    req,
+  };
+};
+
+/**
+ * This is the actual context you will use in your router. It will be used to process every request
+ * that goes through your tRPC endpoint.
+ *
+ * @see https://trpc.io/docs/context
+ */
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
+  return createInnerTRPCContext({
+    req: opts.req,
+  });
+};
 
 const t = initTRPC.create({
   transformer,

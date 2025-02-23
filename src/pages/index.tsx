@@ -1,12 +1,12 @@
 /**
  * This is a Next.js page.
  */
-import React from 'react';
-import { trpc } from '../utils/trpc';
+import React from "react";
+import { trpc } from "../utils/trpc";
 
 function QueryExample() {
   // 💡 Tip: CMD+Click (or CTRL+Click) on `greeting` to go to the server definition
-  const result = trpc.greeting.useQuery({ name: 'client' });
+  const result = trpc.greeting.useQuery({ name: "client" });
 
   if (!result.data) {
     return (
@@ -28,53 +28,12 @@ function QueryExample() {
   );
 }
 
-function SubscriptionExample() {
-  const subscription = trpc.loopData.useSubscription();
-  return (
-    <table>
-      <tr>
-        <th>Last data</th>
-        <td>{subscription.data?.data}</td>
-      </tr>
-      <tr>
-        <th>Last Event ID</th>
-        <td>{subscription.data?.id}</td>
-      </tr>
-      <tr>
-        <th>Status</th>
-        <td>
-          {subscription.status}
-          {subscription.status === 'error' && (
-            <div>
-              <button onClick={() => subscription.reset()}>Reset</button>
-            </div>
-          )}
-        </td>
-      </tr>
-    </table>
-  );
-}
-
-let hasEverMounted = false;
-
-function NoSSR(props: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = React.useState(hasEverMounted);
-  React.useEffect(() => {
-    hasEverMounted = true;
-    setHasMounted(true);
-  }, []);
-  return hasMounted ? <>{props.children}</> : null;
-}
-
 export default function IndexPage() {
   return (
     <div>
       <h2>Query</h2>
       <QueryExample />
       <h2>Subscription</h2>
-      <NoSSR>
-        <SubscriptionExample />
-      </NoSSR>
     </div>
   );
 }
